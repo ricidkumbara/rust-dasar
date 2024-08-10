@@ -288,4 +288,16 @@ fn if_expression() {
     } else {
         println!("Not Good");
     }
+
+    
+    // Let statement
+    let result: &str = if value > 8 {
+        "Good"        
+    } else if value > 5 {
+        "Not Good"
+    } else {
+        "Very Good"
+    };
+
+    println!("{}", result);
 }
