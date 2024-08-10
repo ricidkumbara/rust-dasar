@@ -419,3 +419,13 @@ fn range_inclusive() {
         println!("Value : {} | Index: {}", array[i], i);
     }
 }
+
+#[allow(dead_code)]
+fn say_hello() {
+    println!("Hello");    
+}
+
+#[test]
+fn test_say_hello() {
+    say_hello();
+}
