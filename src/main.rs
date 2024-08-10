@@ -66,6 +66,7 @@ fn number_conversion() {
 
     let d: i64 = 1000000000;
     let e: i8 = d as i8;
+    println!("{}", d);
     println!("{}", e);
 }
 
@@ -438,4 +439,115 @@ fn say_goodbye(first_name: &str, last_name: &str) {
 #[test]
 fn test() {
     say_goodbye("Ricid", "Kumbara");
+}
+
+#[allow(dead_code)]
+fn factorial_loop(n: i32) -> i32 {
+    if n < 1 {
+        return  0;
+    }
+
+    let mut result = 1;
+    for i in 1..=n {
+        result *= i;
+    }
+
+    return result;
+}
+
+#[test]
+fn test_factorial_loop() {
+    let result: i32 = factorial_loop(5);
+    println!("{}", result);
+
+    let result: i32 = factorial_loop(-5);
+    println!("{}", result);
+}
+
+#[allow(dead_code)]
+fn print_text(value: String, times: u32) {
+    if times == 0 {
+        return;
+    } else {
+        println!("{}", value);
+    }
+
+    print_text(value, times - 1);
+}
+
+#[test]
+fn test_print_text() {
+    print_text(String::from("Ricid"), 10);
+}
+
+#[allow(dead_code)]
+fn factorial_recursive(n: u32) -> u32 {
+    if n <= 1 {
+        return 1;
+    }
+
+    n * factorial_recursive(n - 1)
+}
+
+#[test]
+fn test_factorial_recursivw() {
+    let result = factorial_recursive(5);
+    println!("{}", result);
+}
+
+#[allow(dead_code)]
+fn print_number(number: i32) {
+    println!("{}", number);
+}
+
+#[allow(dead_code)]
+fn hi(name: String) {
+    println!("{}", name);
+}
+
+#[test]
+fn test_hi() {
+    let number: i32 = 10;
+    print_number(number);
+    println!("{}", number);
+
+    let name: String = String::from("Ricid");
+    hi(name);
+    // println!("{}", name); owner sudah dimove, tidak bisa dipanggil
+}
+
+#[allow(dead_code)]
+fn full_name(first_name: String, last_name: String) -> String {
+    format!("{} {}", first_name, last_name)
+}
+
+#[test]
+fn test_full_name() {
+    let first_name = String::from("Ricid");
+    let last_name = String::from("Kumbara");
+    let name = full_name(first_name, last_name);
+
+    println!("{}", name);
+    // println!("{}", first_name); // owner sudah dimove, tidak bisa dipanggil
+    // println!("{}", last_name); // owner sudah dimove, tidak bisa dipanggil
+}
+
+#[allow(dead_code)]
+fn full_name_2(first_name: String, last_name: String) -> (String, String, String) {
+    let full_name = format!("{} {}", first_name, last_name);
+
+    (first_name, last_name, full_name)
+}
+
+#[test]
+fn test_full_name_2() {
+    // Cara agar ownership bisa dikembalikan
+    
+    let first_name = String::from("Ricid");
+    let last_name = String::from("Kumbara");
+    let (first_name, last_name, full_name) = full_name_2(first_name, last_name);
+
+    println!("{}", first_name);
+    println!("{}", last_name);
+    println!("{}", full_name);
 }
