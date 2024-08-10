@@ -32,6 +32,13 @@ fn shadowing() {
 }
 
 #[test]
+fn implicit_type_declaration() {
+    let a = 1;
+
+    println!("{}", a);
+}
+
+#[test]
 fn explicit() {
     let age: i32 = 20;
     println!("{}", age);
@@ -226,6 +233,7 @@ fn string_test() {
 
     let mut username: &str = "Ricid";
     println!("{}", username);
+
     username = "Kumbara";
     println!("{}", username);
 }
@@ -355,5 +363,59 @@ fn loop_label() {
         }
 
         number += 1;
+    }
+}
+
+#[test]
+fn while_loop() {
+    let mut counter = 1;
+
+    while counter <= 10 {
+        if counter % 2 == 0 {
+            println!("{}", counter);
+        }
+
+        counter += 1;
+    }
+}
+
+#[test]
+fn array_iteration() {
+    let array: [&str; 5] = ["A", "B", "C", "D", "E"];
+    let mut index = 0;
+
+    while index < array.len() {
+        println!("Value : {}", array[index]);
+        index += 1;
+    }
+
+    for value in array {
+        println!("{}", value);
+    }
+}
+
+#[test]
+fn range_exclusive() {
+    let array: [&str; 5] = ["A", "B", "C", "D", "E"];
+ 
+    // Range Exclusive
+    let range = 0..5;
+    println!("Start: {}", range.start);
+    println!("End: {}", range.end);
+
+    for i in range {
+        println!("Value : {} | Index: {}", array[i], i);
+    }
+}
+
+#[test]
+fn range_inclusive() {
+    let array: [&str; 5] = ["A", "B", "C", "D", "E"];
+ 
+    // Range Inclusive
+    let range = 0..=4;
+
+    for i in range {
+        println!("Value : {} | Index: {}", array[i], i);
     }
 }
