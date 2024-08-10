@@ -429,3 +429,13 @@ fn say_hello() {
 fn test_say_hello() {
     say_hello();
 }
+
+#[allow(dead_code)]
+fn say_goodbye(first_name: &str, last_name: &str) {
+    println!("Goodbye {} {}", first_name, last_name);
+}
+
+#[test]
+fn test() {
+    say_goodbye("Ricid", "Kumbara");
+}
