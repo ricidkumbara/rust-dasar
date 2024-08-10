@@ -269,3 +269,12 @@ fn ownership_movement() {
     // println!("{}", name);
     println!("{}", name2);
 }
+
+#[test]
+fn clone() {
+    // untuk melakukan copy data yang ada di HEAP
+    let name1 = String::from("Ricid");
+    let name2 = name1.clone();
+
+    println!("{} {}", name1, name2);
+}
