@@ -542,7 +542,6 @@ fn full_name_2(first_name: String, last_name: String) -> (String, String, String
 #[test]
 fn test_full_name_2() {
     // Cara agar ownership bisa dikembalikan
-    
     let first_name = String::from("Ricid");
     let last_name = String::from("Kumbara");
     let (first_name, last_name, full_name) = full_name_2(first_name, last_name);
@@ -551,3 +550,37 @@ fn test_full_name_2() {
     println!("{}", last_name);
     println!("{}", full_name);
 }
+
+#[allow(dead_code)]
+fn full_name_using_reference(first_name: &String, last_name: &String) -> String {
+    format!("{} {}", first_name, last_name)
+}
+
+#[test]
+fn test_full_name_using_reference() {
+    let first_name: String = String::from("Ricid");
+    let last_name: String = String::from("Kumbara");
+    let name: String = full_name_using_reference(&first_name, &last_name);
+
+    println!("{}", name);
+    println!("{}", first_name);
+    println!("{}", last_name);
+}
+
+#[allow(dead_code)]
+fn change_value(value: &mut String) {
+    value.push_str("Test")    
+}
+
+#[test]
+fn test_change_value() {
+    let mut value: String = String::from("Ricid");
+    println!("{}", value);
+ 
+    change_value(&mut value);
+    println!("{}", value);
+ 
+    value.push_str("_");
+    println!("{}", value);
+}
+
