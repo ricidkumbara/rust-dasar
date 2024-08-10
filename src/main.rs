@@ -187,3 +187,85 @@ fn two_dimensional_array() {
     println!("{}", matrix[1][0]);
     println!("{}", matrix[1][1]);
 }
+
+#[test]
+fn constant() {
+    const PI: f32 = 3.14;
+    println!("{}", PI)
+}
+
+#[allow(dead_code)]
+fn function_a() {
+    let a = 10;
+    let b = String::from("Ricid");
+
+    println!("{} {}", a, b);
+}
+
+#[allow(dead_code)]
+fn function_b() {
+    let a = 10;
+    let b = String::from("Kumbara");
+    println!("{} {}", a, b);
+}
+
+#[test]
+fn stack_heap() {
+    function_a();
+    function_b();
+}
+
+#[test]
+fn string_test() {
+    // string slice
+    let name: &str = "  Ricid Kumbara  ";
+    let trim: &str = name.trim();
+
+    println!("{}", name);
+    println!("{}", trim);
+
+    let mut username: &str = "Ricid";
+    println!("{}", username);
+    username = "Kumbara";
+    println!("{}", username);
+}
+
+#[test]
+fn string_type() {
+    // &str disimpoan di stack
+    // String:: disimpan di heap
+
+    let mut name: String = String::from("Ricid Kumbara");
+    name.push_str(" Kagenou");
+    println!("{}", name);
+    
+    let new_name: String = name.replace("Ricid", "Ricid_");
+    println!("{}", new_name);
+}
+
+#[test]
+fn ownership_rules() {
+    // println!("{}", a);
+    let a: i32 = 1;
+    
+    {
+        let b: i32 = 2;
+        println!("{}", b); 
+    }
+    
+    // println!("{}", b); 
+    println!("{}", a);
+}
+
+#[test]
+fn ownership_movement() {
+    let name: String = String::from("Ricid");
+    println!("{}", name);
+
+    // ownership dari name dipindahkan ke name2
+    let name2: String = name;
+    
+    // name1 tidak bisa diakses disini
+    // println!("{}", name);
+    println!("{}", name2);
+}
