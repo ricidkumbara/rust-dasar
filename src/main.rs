@@ -614,6 +614,12 @@ struct Person {
     age: u8,
 }
 
+impl Person {
+    fn say_hello(self, name: &str) {
+        println!("Hello {}, my name is {}", name, self.first_name);
+    }
+}
+
 #[test]
 fn struct_person_common() {
     let person: Person = Person { 
@@ -681,4 +687,16 @@ struct Nothing;
 fn struct_without_field() {
     let _nothing: Nothing = Nothing;
     let _nothing: Nothing = Nothing {};
+}
+
+#[test]
+fn struct_with_method() {
+    let person: Person = Person { 
+        first_name: String::from("Ricid"), 
+        middle_name: String::from("Kumbara"), 
+        last_name: String::from("Kagenou"), 
+        age: 26 
+    };
+
+    person.say_hello("Fulan");
 }
