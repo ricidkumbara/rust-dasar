@@ -595,3 +595,13 @@ fn slice_reference() {
     println!("{:?}", slice2);
     println!("{:?}", slice3);
 }
+
+#[test]
+fn string_slice() {
+    let name = String::from("Ricid Kumbara");
+    let first_name: &str = &name[0..3];
+    let last_name: &str = &name[10..];
+
+    println!("{}", first_name);
+    println!("{}", last_name);
+}
