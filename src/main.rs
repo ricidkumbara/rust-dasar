@@ -605,3 +605,57 @@ fn string_slice() {
     println!("{}", first_name);
     println!("{}", last_name);
 }
+
+#[allow(dead_code)]
+struct Person {
+    first_name: String,
+    middle_name: String,
+    last_name: String,
+    age: u8,
+}
+
+#[test]
+fn struct_person() {
+    let person: Person = Person { 
+        first_name: String::from("Ricid"), 
+        middle_name: String::from("Kumbara"), 
+        last_name: String::from("Kagenou"), 
+        age: 26 
+    };
+    
+    println!("{}", person.first_name);
+    println!("{}", person.last_name);
+    println!("{}", person.middle_name);
+    println!("{}", person.age);
+
+    let first_name = String::from("Ricid");
+    let last_name: String = String::from("Kumbara");
+    let person2: Person = Person { 
+        first_name, 
+        middle_name: String::from("Kagenou"), 
+        last_name, 
+        age: 26
+    };
+
+    println!("{}", person2.first_name);
+}
+
+#[allow(dead_code)]
+fn print_person(person: &Person) {
+    println!("{}", person.first_name);
+    println!("{}", person.last_name);
+    println!("{}", person.middle_name);
+    println!("{}", person.age);
+}
+
+#[test]
+fn struct_person_function() {
+    let person: Person = Person { 
+        first_name: String::from("Ricid"), 
+        middle_name: String::from("Kumbara"), 
+        last_name: String::from("Kagenou"), 
+        age: 26 
+    };
+    
+    print_person(&person);
+}
