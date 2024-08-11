@@ -8,13 +8,13 @@ fn hello_test() {
 }
 
 #[test]
-fn test_variable() {
+fn variable() {
     let name = "Ricid Kumbara";
     println!("Hello {}", name);
 }
 
 #[test]
-fn test_mutable() {
+fn variable_mutable() {
     let mut name = "Ricid Kumbara";
     println!("Hello {}", name);
 
@@ -23,7 +23,7 @@ fn test_mutable() {
 }
 
 #[test]
-fn shadowing() {
+fn variable_shadowing() {
     let name = "Ricid Kumbara";
     println!("Hello {}", name);
     
@@ -32,14 +32,14 @@ fn shadowing() {
 }
 
 #[test]
-fn implicit_type_declaration() {
+fn variable_implicit_type_declaration() {
     let a = 1;
 
     println!("{}", a);
 }
 
 #[test]
-fn explicit() {
+fn variable_explicit() {
     let age: i32 = 20;
     println!("{}", age);
 }
@@ -672,4 +672,13 @@ fn struct_tupple() {
     let geo_point: GeoPoint = GeoPoint(-6.0001, 100.123434);
     println!("{}", geo_point.0);
     println!("{}", geo_point.1);
+}
+
+#[allow(dead_code)]
+struct Nothing;
+
+#[test]
+fn struct_without_field() {
+    let _nothing: Nothing = Nothing;
+    let _nothing: Nothing = Nothing {};
 }
