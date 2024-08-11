@@ -663,3 +663,13 @@ fn struct_person_function() {
     
     print_person(&person);
 }
+
+#[allow(dead_code)]
+struct GeoPoint(f64, f64);
+
+#[test]
+fn struct_tupple() {
+    let geo_point: GeoPoint = GeoPoint(-6.0001, 100.123434);
+    println!("{}", geo_point.0);
+    println!("{}", geo_point.1);
+}
