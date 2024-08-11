@@ -615,7 +615,7 @@ struct Person {
 }
 
 #[test]
-fn struct_person() {
+fn struct_person_common() {
     let person: Person = Person { 
         first_name: String::from("Ricid"), 
         middle_name: String::from("Kumbara"), 
@@ -630,14 +630,18 @@ fn struct_person() {
 
     let first_name = String::from("Ricid");
     let last_name: String = String::from("Kumbara");
-    let person2: Person = Person { 
+    let mut person2: Person = Person { 
         first_name, 
         middle_name: String::from("Kagenou"), 
         last_name, 
         age: 26
     };
 
+    person2.first_name = String::from("Ricid_");
     println!("{}", person2.first_name);
+
+    let person3 = Person{..person};
+    println!("{}", person3.first_name);
 }
 
 #[allow(dead_code)]
