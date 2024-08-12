@@ -5,7 +5,8 @@ mod model;
 
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
-
+use core::ops::Add;
+use std::fmt::Debug;
 
 fn main() {
     println!("Hello, world!");
@@ -950,6 +951,11 @@ trait CanSayHello {
     fn say_hello_trait_to(&self, name: &str) -> String;
 }
 
+trait CanSayGoodbye {
+    fn good_bye(&self) -> String;
+    fn good_bye_to(&self, name: &str) -> String;
+}
+
 impl CanSayHello for Person {
     fn say_hello_trait(&self) -> String {
         format!("Hello, my name is {}", self.first_name)
@@ -958,6 +964,25 @@ impl CanSayHello for Person {
     fn say_hello_trait_to(&self, name: &str) -> String {
         format!("Hello {}, my name is {}", name, self.first_name)
     }
+}
+
+impl CanSayGoodbye for Person {
+    fn good_bye(&self) -> String {
+        format!("Goodbye, my name is {}", self.first_name)
+    }
+
+    fn good_bye_to(&self, name: &str) -> String {
+        format!("Goodbye {}, my name is {}", name, self.first_name)
+    }
+}
+
+fn say_hello_trait_new(value: &impl CanSayHello) {
+    println!("{}", value.say_hello_trait());
+}
+
+fn hello_and_goodbye(value: &(impl CanSayHello + CanSayGoodbye)) {
+    println!("{}", value.say_hello_trait());
+    println!("{}", value.good_bye());
 }
 
 #[test]
@@ -972,4 +997,319 @@ fn trait_test() {
     println!("{}", person.hello());
     println!("{}", person.say_hello_trait());
     println!("{}", person.say_hello_trait_to("Fulan"));
+
+    // Trait as parameter
+    say_hello_trait_new(&person);
+
+    println!("{}", person.good_bye());
+    println!("{}", person.good_bye_to("Fulan"));
+
+    // Multiple trait parameter
+    hello_and_goodbye(&person);
+
+    CanSayHello::say_hello_trait(&person);
+    Person::say_hello(&person, "Ricid");
+}
+
+struct SimplePerson {
+    name: String,
+}
+
+impl CanSayGoodbye for SimplePerson {
+    fn good_bye(&self) -> String {
+        format!("Goodbye, my name is {}", self.name)
+    }
+
+    fn good_bye_to(&self, name: &str) -> String {
+        format!("Goodbye {}, my name is {}", name, self.name)
+    }
+}
+
+fn create_person(name: String) -> impl CanSayGoodbye {
+    SimplePerson { name }
+}
+
+#[test]
+fn trait_return_value() {
+    let person = create_person(String::from("Ricid"));
+    println!("{}", person.good_bye());
+    println!("{}", person.good_bye_to("Ricid"));
+}
+
+// trait CanSay: CanSayHello + CanSayGoodbye {}
+
+// Stuct with default type
+struct Point<T = i32> {
+    x: T,
+    y: T,
+}
+
+impl<T> Point<T> {
+    fn get_x(&self) -> &T {
+        &self.x
+    }
+
+    fn get_y(&self) -> &T {
+        &self.y
+    }
+}
+
+#[test]
+fn generic_struct() {
+    let integer: Point<i32> = Point::<i32> {
+        x: 5,
+        y: 10,
+    };
+
+    let float: Point<f64> = Point::<f64> {
+        x: 5.1,
+        y: 10.2,
+    };
+
+    println!("{}", integer.x);
+    println!("{}", integer.y);
+    println!("{}", float.x);
+    println!("{}", float.y);
+}
+
+#[allow(dead_code)]
+enum Value<T> {
+    NONE,
+    VALUE(T),
+}
+
+#[test]
+fn generic_enum() {
+    let value:Value<i32> = Value::<i32>::VALUE(10);
+
+    match value {
+        Value::NONE => {
+            println!("None")
+        }
+        Value::VALUE(value) => {
+            println!("value {}", value)
+        }
+    }
+}
+
+struct HI<T> where T: CanSayGoodbye {
+    value: T,
+}
+
+#[test]
+fn generic_bound() {
+    let hi = HI::<SimplePerson> {
+        value: SimplePerson { 
+            name: String::from("Ricid")
+        }
+    };
+
+    println!("{}", hi.value.name);
+}
+
+fn min<T: PartialOrd>(value1: T, value2: T) -> T {
+    if value1 < value2 {
+        value1
+    } else {
+        value2
+    }
+}
+
+#[test]
+fn generic_in_function() {
+    let result = min::<i32>(10, 20);
+    println!("{}", result);
+
+    let result = min(10.1, 20.2);
+    println!("{}", result);
+}
+
+#[test]
+fn generic_method() {
+    let point = Point{x: 10, y: 11};
+    println!("{}", point.get_x());
+    println!("{}", point.get_y());
+    println!("{}", point.get_value());
+}
+
+trait GetValue<T> {
+    fn get_value(&self) -> &T;
+}
+
+impl<T> GetValue<T> for Point<T> {
+    fn get_value(&self) -> &T {
+        &self.x
+    }
+}
+
+struct Apple {
+    quantity: i32,
+}
+
+impl Add for Apple {
+    type Output = Apple;    
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Apple{
+            quantity: self.quantity + rhs.quantity
+        }
+    }
+}
+
+#[test]
+fn overloadable_operators() {
+    let apple1 = Apple{quantity: 10};
+    let apple2 = Apple{quantity: 10};
+
+    let apple3 = apple1 + apple2;
+    println!("{}", apple3.quantity);
+}
+
+fn double(value: Option<i32>) -> Option<i32> {
+    match value {
+        None => None,
+        Some(i) => Some(i * 2),
+    }
+}
+
+#[test]
+fn option() {
+    // let result = double(Some(10));   
+    let result = double(Option::Some(10));   
+    println!("{:?}", result);
+
+    let result = double(None);   
+    println!("{:?}", result);
+}
+
+impl PartialEq for Apple {
+    fn eq(&self, other: &Self) -> bool {
+        self.quantity == other.quantity
+    }   
+}
+
+impl PartialOrd for Apple {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.quantity.partial_cmp(&other.quantity)
+    }
+}
+
+#[test]
+fn comparing() {
+    let apple1 = Apple{quantity: 10};
+    let apple2 = Apple{quantity: 20};
+
+    println!("{}", apple1 == apple2);
+    println!("{}", apple1 < apple2);
+    println!("{}", apple1 > apple2);
+}
+
+#[test]
+fn string_manipulation() {
+    let s = String::from("Ricid Kumbara");
+
+    println!("{}", s.to_uppercase());
+    println!("{}", s.to_lowercase());
+    println!("{}", s.len());
+    println!("{}", s.replace("Ricid", "_"));
+    println!("{}", s.contains("Ricid"));
+    println!("{}", s.ends_with("Kumbara"));
+    println!("{}", s.trim());
+    println!("{}", &s[0..3]);
+    println!("{:?}", s.get(0..3));
+}
+
+struct Category {
+    id: String,
+    name: String,
+}
+
+impl Debug for Category {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Category")
+            .field("id", &self.id)
+            .field("name", &self.name)
+            .finish()
+    }   
+}
+
+#[test]
+fn formatting() {
+    let category = Category {
+        id: String::from("1"),
+        name: String::from("HP"),
+    };
+
+    println!("{:?}", category);
+}
+
+#[test]
+fn closure() {
+    // Closure juga biasa disebut anonimous function
+    let sum = |value1: i32, value2: i32| -> i32 {
+        value1 + value2
+    };
+
+    let result = sum(1, 2);
+    println!("{}", result);
+}
+
+#[allow(dead_code)]
+fn print_with_filter(value: String, filter: fn(String) -> String) {
+    let result = filter(value);
+    println!("{}", result);
+}
+
+#[test]
+fn closure_as_parameter() {
+    print_with_filter(String::from("Ricid"), |value: String| -> String {
+        value.to_ascii_uppercase()
+    });
+}
+
+#[allow(dead_code)]
+fn to_uppercase(value: String) -> String {
+    value.to_uppercase()
+}
+
+#[test]
+fn closure_with_existring_function() {
+    print_with_filter(String::from("Ricid"), to_uppercase);
+}
+
+#[test]
+fn closure_scoope() {
+    let mut counter = 0;
+
+    let mut increment = || {
+        counter += 1;
+        println!("Increment");
+    };
+    
+    increment();
+    increment();
+    increment();
+
+    print!("{}", counter);
+}
+
+struct Counter {
+    counter: i32,
+}
+
+impl Counter {
+    fn increment(&mut self) {
+        self.counter += 1;
+        println!("Increment");
+    }
+}
+
+#[test]
+fn counter_test() {
+    let mut counter = Counter{counter: 0};
+    counter.increment();
+    counter.increment();
+    counter.increment();
+
+    println!("{}", counter.counter);
 }
