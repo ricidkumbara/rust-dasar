@@ -1,23 +1,10 @@
 mod first;
 mod second;
+mod model;
 
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
 
-mod model {
-    pub struct User {
-        pub first_name: String,
-        pub username: String,
-        pub email: String,
-        pub age: u8,
-    }
-
-    impl User {
-        pub fn say_hello(&self, name: &str) {
-            println!("Hello {}, my name is {}", name, self.first_name);
-        }
-    }
-}
 
 fn main() {
     println!("Hello, world!");
