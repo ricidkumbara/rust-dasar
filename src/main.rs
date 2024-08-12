@@ -671,6 +671,7 @@ fn struct_person_function() {
     print_person(&person);
 }
 
+// Struct Tupple
 #[allow(dead_code)]
 struct GeoPoint(f64, f64);
 
@@ -809,4 +810,101 @@ fn match_range_pattern() {
             println!("Invalid Value {}", other);
         }
     }
+}
+
+#[test]
+fn match_struct_destructuring() {
+    let point: GeoPoint = GeoPoint::new(0.0, 1.0);
+
+    match point {
+        GeoPoint(long, 0.0) => {
+            println!("Long: {}", long);
+        }
+        GeoPoint(0.0, lat) => {
+            println!("Lat: {}", lat);
+        }
+        GeoPoint(long, lat) => {
+            println!("Long : {} Lat: {}", long, lat);
+        }
+    }
+
+    let person = Person{
+        first_name: String::from("Ricid"),
+        middle_name: String::from("Kumbara"),
+        last_name: String::from("Kagenou"),
+        age: 20,
+    };
+
+    match person {
+        Person { first_name, last_name, .. } => {
+            println!("{} {}", first_name, last_name);
+        }
+    }
+}
+
+#[test]
+fn match_struct_destructuring_ignoring() {
+    let point: GeoPoint = GeoPoint::new(0.0, 1.0);
+
+    match point {
+        GeoPoint(long, _) => {
+            println!("Long: {}", long);
+        }
+    }
+}
+
+#[test]
+fn match_struct_destructuring_ignoring_range() {
+    let value = 101;
+
+    match value {
+        75..=100 => {
+            println!("Great");    
+        }
+        50..=74 => {
+            println!("Good");
+        }
+        0..=49 => {
+            println!("Bad");
+        }
+        _ => {
+            println!("Invalid Value",);
+        }
+    }
+}
+
+#[test]
+fn match_exression() {
+    let value = 2;
+
+    let result = match value {
+        0 => "nol",
+        1 => "satu",
+        2 => "dua",
+        _ => "invalid"
+    };
+    println!("{}", result);
+}
+
+#[allow(dead_code)]
+type Age = u8;
+#[allow(dead_code)]
+type IdentityNumber = String;
+
+#[allow(dead_code)]
+struct Customer {
+    id: IdentityNumber,
+    name: String,
+    age: Age,
+}
+
+#[test]
+fn type_alias() {
+    let customer: Customer = Customer { 
+        id: String::from("32001"), 
+        name: String::from("Ricid Kumbara"), 
+        age: 25,
+    };
+
+    println!("{} {} {}", customer.id, customer.name, customer.age);
 }
