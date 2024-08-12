@@ -1,3 +1,33 @@
+use first::say_hello as say_hello_first;
+use second::say_hello as say_hello_second;
+
+mod model {
+    pub struct User {
+        pub first_name: String,
+        pub username: String,
+        pub email: String,
+        pub age: u8,
+    }
+
+    impl User {
+        pub fn say_hello(&self, name: &str) {
+            println!("Hello {}, my name is {}", name, self.first_name);
+        }
+    }
+}
+
+mod first {
+    pub fn say_hello() {
+        println!("Hello from first module");
+    }
+}
+
+mod second {
+    pub fn say_hello() {
+        println!("Hello from second module");
+    }
+}
+
 fn main() {
     println!("Hello, world!");
 }
@@ -907,4 +937,25 @@ fn type_alias() {
     };
 
     println!("{} {} {}", customer.id, customer.name, customer.age);
+}
+
+#[test]
+fn module_test() {
+    let user: model::User = model::User {
+        first_name: String::from("Ricid"),
+        username: String::from("ricid"),
+        email: String::from("ricidkumbara@gmail.com"),
+        age: 20,
+    };
+
+    user.say_hello("Fulan");
+}
+
+#[test]
+fn module_use() {
+    first::say_hello();
+    second::say_hello();
+
+    say_hello_first();
+    say_hello_second();
 }
