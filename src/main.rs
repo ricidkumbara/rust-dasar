@@ -933,8 +933,43 @@ fn module_test() {
 #[test]
 fn module_use() {
     first::say_hello();
+    first::first_second::first_third::say_hello();
     second::say_hello();
 
     say_hello_first();
     say_hello_second();
+}
+
+trait CanSayHello {
+    // Default Trait Implementation
+    fn hello(&self) -> String {
+        String::from("Hello")
+    }
+
+    fn say_hello_trait(&self) -> String;
+    fn say_hello_trait_to(&self, name: &str) -> String;
+}
+
+impl CanSayHello for Person {
+    fn say_hello_trait(&self) -> String {
+        format!("Hello, my name is {}", self.first_name)
+    }
+
+    fn say_hello_trait_to(&self, name: &str) -> String {
+        format!("Hello {}, my name is {}", name, self.first_name)
+    }
+}
+
+#[test]
+fn trait_test() {
+    let person: Person = Person { 
+        first_name: String::from("Ricid"), 
+        middle_name: String::from("Kagenou"), 
+        last_name: String::from("Kumbara"), 
+        age: 25 
+    };
+
+    println!("{}", person.hello());
+    println!("{}", person.say_hello_trait());
+    println!("{}", person.say_hello_trait_to("Fulan"));
 }
