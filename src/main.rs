@@ -1,3 +1,6 @@
+mod first;
+mod second;
+
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
 
@@ -13,18 +16,6 @@ mod model {
         pub fn say_hello(&self, name: &str) {
             println!("Hello {}, my name is {}", name, self.first_name);
         }
-    }
-}
-
-mod first {
-    pub fn say_hello() {
-        println!("Hello from first module");
-    }
-}
-
-mod second {
-    pub fn say_hello() {
-        println!("Hello from second module");
     }
 }
 
