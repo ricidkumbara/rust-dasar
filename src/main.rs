@@ -1,5 +1,6 @@
 mod first;
 mod second;
+mod third;
 mod model;
 
 use first::say_hello as say_hello_first;
