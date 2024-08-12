@@ -614,8 +614,9 @@ struct Person {
     age: u8,
 }
 
+#[allow(dead_code)]
 impl Person {
-    fn say_hello(self, name: &str) {
+    fn say_hello(&self, name: &str) {
         println!("Hello {}, my name is {}", name, self.first_name);
     }
 }
@@ -673,6 +674,13 @@ fn struct_person_function() {
 #[allow(dead_code)]
 struct GeoPoint(f64, f64);
 
+#[allow(dead_code)]
+impl GeoPoint {
+    fn new(long: f64, lat: f64) -> GeoPoint {
+        GeoPoint(long, lat)
+    }
+}
+
 #[test]
 fn struct_tupple() {
     let geo_point: GeoPoint = GeoPoint(-6.0001, 100.123434);
@@ -699,4 +707,106 @@ fn struct_with_method() {
     };
 
     person.say_hello("Fulan");
+    println!("{}", person.first_name);
+}
+
+#[test]
+fn struct_assosiated_function() {
+    let geo_point = GeoPoint::new(6.1001, 6.1001);
+    println!("{}", geo_point.0);
+    println!("{}", geo_point.1);
+}
+
+#[allow(dead_code)]
+enum Level {
+    Regular,
+    Premium,
+    Platinum,
+}
+
+#[test]
+fn enum_test() {
+    let level: Level = Level::Regular;
+
+    match level {
+        Level::Regular => {
+            println!("Regular");
+        }
+        Level::Premium => {
+            println!("Premium");
+        }
+        Level::Platinum => {
+            println!("Platinum");
+        }
+    }
+}
+
+#[allow(dead_code)]
+enum Payment {
+    CreditCard(String),
+    BankTransfer(String, String),
+    EWallet(String, String),
+}
+
+#[allow(dead_code)]
+impl Payment {
+    fn pay(&self, amount: u32) {
+        match self {
+            Payment::CreditCard(number) => {
+                println!("Paying with credit card {} amound {}", number, amount);
+            }
+            Payment::BankTransfer(bank, number) => {
+                println!("Paying with bank transfer {} {} amound {}", bank, number, amount);
+            }
+            Payment::EWallet(wallet, number) => {
+                println!("Paying with credit card {} {} amound {}", wallet, number, amount);
+            }
+        }
+    }
+}
+
+#[test]
+fn enum_with_value() {
+    let _payment1: Payment = Payment::CreditCard(String::from("123"));
+    let _payment2: Payment = Payment::BankTransfer(String::from("BCA"), String::from("123"));
+
+    _payment1.pay(1000);
+    _payment2.pay(2000);
+}
+
+#[test]
+fn match_value() {
+    let name = "Kagenou";
+
+    match name {
+        "Ricid" | "Kagenou" => {
+            println!("Hello Pipe!!!");
+        }
+        "Kumbara" => {
+            println!("Hello Kumbara");
+        }
+        other => {
+            println!("Hello {}", other);
+        }
+    }
+}
+
+#[test]
+fn match_range_pattern() {
+    let value = 100;
+
+    match value {
+        75..=100 => {
+            println!("Great");    
+        }
+        50..=74 => {
+            println!("Good");
+        }
+        0..=49 => {
+            println!("Bad");
+        }
+        other => {
+            println!("Invalid Value {}", other);
+        }
+    }
 }
