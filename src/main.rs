@@ -6,7 +6,7 @@ mod model;
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
 use core::ops::Add;
-use std::{collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList, VecDeque}, fmt::Debug, ops::Deref};
+use std::{cell::RefCell, collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList, VecDeque}, fmt::Debug, ops::Deref, rc::Rc};
 
 fn main() {
     println!("Hello, world!");
@@ -1774,4 +1774,50 @@ fn cleanup_drop() {
     };
 
     println!("{}", book.title);
+}
+
+enum Brand {
+    Of(String, Rc<Brand>),
+    End
+}
+
+#[test]
+fn multiple_ownership() {
+    // let apple = ProductCategory::Of("Apple".to_string(), Box::new(ProductCategory::End));
+    // let laptop = ProductCategory::Of("Apple".to_string(), Box::new(apple));
+    // let smartphone = ProductCategory::Of("Apple".to_string(), Box::new(apple));
+
+    let apple: Rc<Brand> = Rc::new(Brand::Of("Apple".to_string(), Rc::new(Brand::End)));
+    println!("Apple reference count {}", Rc::strong_count(&apple));
+
+    let laptop: Brand = Brand::Of("Laptop".to_string(), Rc::clone(&apple));
+    println!("Apple reference count {}", Rc::strong_count(&apple));
+
+    {
+        let smartphone: Brand = Brand::Of("Smartphone".to_string(), Rc::clone(&apple));
+        println!("Apple reference count {}", Rc::strong_count(&apple));
+    }
+
+    println!("Apple reference count {}", Rc::strong_count(&apple));
+}
+
+#[derive(Debug)]
+struct Seller {
+    name: RefCell<String>,
+    active: RefCell<bool>,
+}
+
+#[test]
+fn interior_mutability_ref_cell() {
+    let seller = Seller {
+        name: RefCell::new("Ricid".to_string()),
+        active: RefCell::new(true),
+    };
+
+    {
+        let mut result: std::cell::RefMut<String> = seller.name.borrow_mut();
+        *result = "Kumbara".to_string();
+    }
+
+    println!("{:?}", seller);
 }
