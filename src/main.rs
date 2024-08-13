@@ -6,7 +6,7 @@ mod model;
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
 use core::ops::Add;
-use std::fmt::Debug;
+use std::{collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList, VecDeque}, fmt::Debug};
 
 fn main() {
     println!("Hello, world!");
@@ -21,6 +21,25 @@ fn hello_test() {
 fn variable() {
     let name = "Ricid Kumbara";
     println!("Hello {}", name);
+
+    // Tipe data yg ada di stack
+    let x: i32 = 10;
+    let y: &i32;
+
+    y = &x;
+
+    println!("{}", x);
+    println!("{}", y);
+    println!("{}", x);
+
+    // Tipe data yg ada di stack
+    let a: String = "Fulan".to_string();
+    println!("{}", a);
+
+    let b: &String;
+    b = &a;
+    println!("{}", a);
+    println!("{}", b);
 }
 
 #[test]
@@ -284,7 +303,7 @@ fn ownership_movement() {
     // ownership dari name dipindahkan ke name2
     let name2: String = name;
     
-    // name1 tidak bisa diakses disini
+    // name tidak bisa diakses disini
     // println!("{}", name);
     println!("{}", name2);
 }
@@ -941,6 +960,7 @@ fn module_use() {
     say_hello_second();
 }
 
+#[allow(dead_code)]
 trait CanSayHello {
     // Default Trait Implementation
     fn hello(&self) -> String {
@@ -951,6 +971,7 @@ trait CanSayHello {
     fn say_hello_trait_to(&self, name: &str) -> String;
 }
 
+#[allow(dead_code)]
 trait CanSayGoodbye {
     fn good_bye(&self) -> String;
     fn good_bye_to(&self, name: &str) -> String;
@@ -976,10 +997,12 @@ impl CanSayGoodbye for Person {
     }
 }
 
+#[allow(dead_code)]
 fn say_hello_trait_new(value: &impl CanSayHello) {
     println!("{}", value.say_hello_trait());
 }
 
+#[allow(dead_code)]
 fn hello_and_goodbye(value: &(impl CanSayHello + CanSayGoodbye)) {
     println!("{}", value.say_hello_trait());
     println!("{}", value.good_bye());
@@ -1025,6 +1048,7 @@ impl CanSayGoodbye for SimplePerson {
     }
 }
 
+#[allow(dead_code)]
 fn create_person(name: String) -> impl CanSayGoodbye {
     SimplePerson { name }
 }
@@ -1039,11 +1063,13 @@ fn trait_return_value() {
 // trait CanSay: CanSayHello + CanSayGoodbye {}
 
 // Stuct with default type
+#[allow(dead_code)]
 struct Point<T = i32> {
     x: T,
     y: T,
 }
 
+#[allow(dead_code)]
 impl<T> Point<T> {
     fn get_x(&self) -> &T {
         &self.x
@@ -1092,6 +1118,7 @@ fn generic_enum() {
     }
 }
 
+#[allow(dead_code)]
 struct HI<T> where T: CanSayGoodbye {
     value: T,
 }
@@ -1107,6 +1134,7 @@ fn generic_bound() {
     println!("{}", hi.value.name);
 }
 
+#[allow(dead_code)]
 fn min<T: PartialOrd>(value1: T, value2: T) -> T {
     if value1 < value2 {
         value1
@@ -1132,6 +1160,7 @@ fn generic_method() {
     println!("{}", point.get_value());
 }
 
+#[allow(dead_code)]
 trait GetValue<T> {
     fn get_value(&self) -> &T;
 }
@@ -1165,6 +1194,7 @@ fn overloadable_operators() {
     println!("{}", apple3.quantity);
 }
 
+#[allow(dead_code)]
 fn double(value: Option<i32>) -> Option<i32> {
     match value {
         None => None,
@@ -1219,6 +1249,7 @@ fn string_manipulation() {
     println!("{:?}", s.get(0..3));
 }
 
+#[allow(dead_code)]
 struct Category {
     id: String,
     name: String,
@@ -1293,10 +1324,12 @@ fn closure_scoope() {
     print!("{}", counter);
 }
 
+#[allow(dead_code)]
 struct Counter {
     counter: i32,
 }
 
+#[allow(dead_code)]
 impl Counter {
     fn increment(&mut self) {
         self.counter += 1;
@@ -1312,4 +1345,345 @@ fn counter_test() {
     counter.increment();
 
     println!("{}", counter.counter);
+}
+
+#[test]
+fn vector() {
+    let mut names: Vec<String> = Vec::<String>::new();
+    names.push(String::from("Ricid"));
+    names.push(String::from("Kumbara"));
+    names.push(String::from("Kagenou"));
+
+    // Cara ini akan memindahkan ownership
+    // for name in names {
+    //     println!("{}", name);
+    // }
+
+    // Error, ownership sudah dipindahkan
+    // println!("{:?}", names); 
+
+    for name in &names {
+        println!("{}", name);
+    }
+
+    // Tidak error karena menggunakan references
+    println!("{:?}", names);
+}
+
+#[test]
+fn vector_deque() {
+    let mut names: VecDeque<String> = VecDeque::<String>::new();
+    names.push_back(String::from("Ricid"));
+    names.push_back(String::from("Kumbara"));
+    names.push_front(String::from("Kagenou"));
+
+    for name in &names {
+        println!("{}", name);
+    }
+}
+
+#[test]
+fn linked_list() {
+    let mut names: LinkedList<String> = LinkedList::<String>::new();
+    names.push_back(String::from("Ricid"));
+    names.push_back(String::from("Kumbara"));
+    names.push_front(String::from("Kagenou"));
+
+    // Tidak bisa akses linked list by index
+    // println!("{}", names[1]);
+
+    for name in &names {
+        println!("{}", name);
+    }
+}
+
+#[test]
+fn hash_map() {
+    // Akses data bisa menggunakan index
+    let mut map: HashMap<String, String> = HashMap::new();
+    map.insert(String::from("name"), String::from("Ricid"));
+    map.insert(String::from("age"), String::from("26"));
+
+    let name = map.get("name");
+    let age = map.get("age");
+
+    // println!("{:?}", name.unwrap());
+    println!("Name {}", name.unwrap());
+    println!("Age {}", age.unwrap());
+}
+
+#[test]
+fn btree_map() {
+    let mut map: BTreeMap<String, String> = BTreeMap::new();
+    map.insert(String::from("name"), String::from("Ricid"));
+    map.insert(String::from("age"), String::from("26"));
+    map.insert(String::from("country"), String::from("Indonesia"));
+
+    for entry in map {
+        println!("{} : {}", entry.0, entry.1);
+    }
+}
+
+#[test]
+fn hash_set() {
+    let mut set: HashSet<String> = HashSet::new();
+    set.insert(String::from("Ricid")); 
+    set.insert(String::from("Ricid")); 
+    set.insert(String::from("Kumbara")); 
+    set.insert(String::from("Kumbara")); 
+    set.insert(String::from("Kagenou")); 
+    set.insert(String::from("Kagenou")); 
+
+    for v in set {
+        println!("{}", v);
+    }
+}
+
+#[test]
+fn btree_set() {
+    let mut set: BTreeSet<String> = BTreeSet::new();
+    set.insert(String::from("Ricid")); 
+    set.insert(String::from("Ricid")); 
+    set.insert(String::from("Kumbara")); 
+    set.insert(String::from("Kumbara")); 
+    set.insert(String::from("Kagenou")); 
+    set.insert(String::from("Kagenou")); 
+
+    for v in set {
+        println!("{}", v);
+    }
+}
+
+#[test]
+fn iterator_test() {
+    let array: [i32; 5] = [1, 2, 3, 4, 5];
+    let mut iterator = array.iter();
+
+    println!("{:?}", iterator);
+
+    while let Some(v) = iterator.next() {
+        println!("{}", v);
+    }
+
+    // for v in iterator {
+    //     println!("{}", v);
+    // }
+    println!("{:?}", iterator);
+}
+
+#[test]
+fn iterator_method() {
+    let vector = vec![1, 2, 3, 4, 5];
+
+    let sum: i32 = vector.iter().sum();
+    println!("{}", sum);
+    
+    let count: usize = vector.iter().count();
+    println!("{}", count);
+
+    let doubled: Vec<i32> = vector.iter().map(|x| x * 2).collect();
+    println!("{:?}", doubled);
+    
+    let odd: Vec<&i32> = vector.iter().filter(|x| *x % 2 != 0).collect();
+    println!("{:?}", odd);
+}
+
+#[allow(dead_code)]
+fn connect_database(host: Option<String>) {
+    match host {
+        None => {
+            panic!("No database host provided");
+        }
+        Some(host) => {
+            println!("Connecting to database {}", host);
+        }
+    }
+}
+
+#[test]
+fn panic_test() {
+    connect_database(Some(String::from("localhost")));
+    // connect_database(None);
+}
+
+#[allow(dead_code)]
+fn connect_cache(host: Option<String>) -> Result<String, String> {
+    match host {
+        None => {
+            Err("No cache host provided".to_string())
+        }
+        Some(host) => {
+            Ok(host)
+        }
+    }
+}
+
+#[test]
+fn recoverable_error() {
+    let cache = connect_cache(Some("localhost".to_string()));
+    // let cache = connect_cache(None);
+
+    match cache {
+        Ok(host) => {
+            println!("Connected to {}", host);
+        }
+        Err(err) => {
+            println!("Error with message {}", err);
+        }
+    }
+}
+
+#[allow(dead_code)]
+fn connect_email(host: Option<String>) -> Result<String, String> {
+    match host {
+        None => {
+            Err("No email host provided".to_string())
+        }
+        Some(host) => {
+            Ok(host)
+        }
+    }
+}
+
+#[allow(dead_code)]
+fn connect_application(host: Option<String>) -> Result<String, String> {
+    connect_cache(host.clone())?;
+    connect_email(host.clone())?;
+
+    Ok("Connected to application".to_string())
+}
+
+#[test]
+fn application_error() {
+    // let result = connect_application(Some("localhost".to_string()));
+    let result = connect_application(None);
+
+    match result {
+        Ok(host) => {
+            println!("Success: {}", host);
+        }
+        Err(err) => {
+            println!("Error: {}", err);
+        }
+    }
+}
+
+fn longest<'a>(value1: &'a str, value2: &'a str) -> &'a str {
+    if value1.len() > value2.len() {
+        value1
+    } else {
+        value2
+    }
+}
+
+#[test]
+fn lifetime_annotation() {
+    let value1 = "Ricid";
+    let value2 = "Kumbara";
+    let result = longest(value1, value2);
+
+    println!("{}", result);
+}
+
+struct Student<'a, 'b> {
+    name: &'a str,
+    last_name: &'b str,
+}
+
+impl<'a, 'b> Student<'a, 'b> {
+    fn longest_name(&self, student: &Student<'a, 'b>) -> &'a str {
+        if self.name.len() > student.name.len() {
+            self.name
+        } else {
+            student.name
+        }
+    }
+}
+
+fn longest_student_name<'a, 'b>(student1: &Student<'a, 'b>, student2: &Student<'a, 'b>) -> &'a str {
+    if student1.name.len() > student2.name.len() {
+        student1.name
+    } else {
+        student2.name
+    }
+}
+
+#[test]
+fn lifetime_struct() {
+    let student: Student = Student {
+        name: "Ricidddd",
+        last_name: "Kumbara"
+    };
+
+    println!("{}", student.name);
+    println!("{}", student.last_name);
+
+    let student2: Student = Student {
+        name: "Fulan",
+        last_name: "A"
+    };
+
+    let result = longest_student_name(&student, &student2);
+    println!("{}", result);
+    
+    let result = student.longest_name(&student2);
+    println!("{}", result);
+}
+
+struct Teacher<'a, ID> where ID: Ord {
+    id: ID,
+    name: &'a str,
+}
+
+#[test]
+fn liftime_annotation_generic() {
+    let teacher: Teacher<i32> = Teacher { 
+        id: 10, 
+        name: "Ricid", 
+    };
+    println!("{}", teacher.id);
+    println!("{}", teacher.name);
+}
+
+#[derive(Debug, PartialEq, PartialOrd)]
+struct Company {
+    name: String,
+    location: String,
+    website: String,
+}
+
+#[test]
+fn attribute_derive() {
+    let company = Company {
+        name: "Ricid Kumbara".to_string(),
+        location: "Indonesia".to_string(),
+        website: "https://motivatorbugs.com".to_string(),
+    };
+
+    let company2 = Company {
+        name: "Ricid Kumbara".to_string(),
+        location: "Indonesia".to_string(),
+        website: "https://motivatorbugs.com".to_string(),
+    };
+
+    println!("{:?}", company);
+
+    let result = company == company2;
+    println!("{}", result);
+}
+
+fn display_number(value: i32) {
+    println!("{}", value);
+}
+
+fn display_number_reference(value: &i32) {
+    println!("{}", value);
+}
+
+#[test]
+fn smart_pointer_box() {
+    let value: Box<i32> = Box::new(10);
+    println!("{}", value);
+    display_number(*value);
+    display_number_reference(&value);
 }
