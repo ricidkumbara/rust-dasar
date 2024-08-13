@@ -32,7 +32,7 @@ fn variable() {
     println!("{}", y);
     println!("{}", x);
 
-    // Tipe data yg ada di stack
+    // Tipe data yg ada di heap
     let a: String = "Fulan".to_string();
     println!("{}", a);
 
@@ -1820,4 +1820,61 @@ fn interior_mutability_ref_cell() {
     }
 
     println!("{:?}", seller);
+}
+
+static APPLICATION: &str = "Rust Application";
+
+#[test]
+fn static_test() {
+    println!("{}", APPLICATION);
+}
+
+static mut COUNTER: u32 = 0;
+
+unsafe fn increment() {
+    COUNTER += 1;
+}
+
+#[test]
+fn unsafe_test() {
+    unsafe {
+        increment();
+        COUNTER += 1;
+
+        println!("{}", COUNTER);
+    }
+}
+
+macro_rules! hi {
+    () => {
+        println!("Hi!");
+    };
+    ($name: expr) => {
+        println!("Hi {}!", $name);
+    };
+}
+
+macro_rules! iterate {
+    ($array: expr) => {
+        for i in $array {
+            println!("{}", i);
+        }
+    };
+    ($($item: expr), *) => {
+        $(
+            println!("{}", $item);
+        )*
+    };
+}
+
+#[test]
+fn macro_test() {
+    hi!();
+    hi!("Ricid");
+    hi! {
+        "Ricid"
+    };
+
+    iterate!([1, 2, 3, 4, 5]);
+    iterate!(1, 2, 3);
 }
