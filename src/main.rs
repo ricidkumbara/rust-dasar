@@ -3,6 +3,8 @@ mod second;
 mod third;
 mod model;
 
+mod _1_variable;
+
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
 use core::ops::Add;
