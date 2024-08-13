@@ -6,7 +6,7 @@ mod model;
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
 use core::ops::Add;
-use std::{collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList, VecDeque}, fmt::Debug};
+use std::{collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList, VecDeque}, fmt::Debug, ops::Deref};
 
 fn main() {
     println!("Hello, world!");
@@ -1684,6 +1684,75 @@ fn display_number_reference(value: &i32) {
 fn smart_pointer_box() {
     let value: Box<i32> = Box::new(10);
     println!("{}", value);
+    
     display_number(*value);
     display_number_reference(&value);
+
+    println!("{}", value);
+}
+
+#[derive(Debug)]
+enum ProductCategory {
+    Of(String, Box<ProductCategory>),
+    End
+}
+
+#[test]
+fn box_enum() {
+    let category: ProductCategory = ProductCategory::Of (
+        "Laptop".to_string(),
+        Box::new(ProductCategory::Of(
+            "Dell".to_string(),
+            Box::new(ProductCategory::End)
+        )),
+    );
+    println!("{:?}", category);
+    print_category(&category);
+}
+
+fn print_category(category: &ProductCategory) {
+    println!("{:?}", category);
+}
+
+#[test]
+fn dereference() {
+    let value1: Box<i32> = Box::new(10);
+    let value2: Box<i32> = Box::new(2);
+
+    let result: i32 = *value1 * *value2;
+    print!("{}", result);
+}
+
+struct MyValue<T> {
+    value: T,
+}
+
+impl<T> Deref for MyValue<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.value
+    }   
+}
+
+#[test]
+fn dereference_struct() {
+    let value = MyValue {
+        value: 10,
+    };
+
+    println!("{}", *value);
+}
+
+fn say_hello_reference(name: &String) {
+    println!("Hello {}", name);
+}
+
+#[test]
+fn deref_reference() {
+    let name = MyValue {
+        value: "Ricid".to_string(),
+    };
+
+    say_hello_reference(&name);
 }
