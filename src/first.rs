@@ -1,11 +1,13 @@
 use crate::third::say_hello as say_hello_third;
 
+#[allow(dead_code)]
 pub fn say_hello() {
     println!("Hello from first module");
 
     say_hello_third();
 }
 
+#[allow(dead_code)]
 pub mod first_second {
     pub mod first_third {
         pub fn say_hello() {

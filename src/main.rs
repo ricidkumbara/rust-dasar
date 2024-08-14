@@ -1570,6 +1570,7 @@ fn application_error() {
     }
 }
 
+#[allow(dead_code)]
 fn longest<'a>(value1: &'a str, value2: &'a str) -> &'a str {
     if value1.len() > value2.len() {
         value1
@@ -1587,11 +1588,13 @@ fn lifetime_annotation() {
     println!("{}", result);
 }
 
+#[allow(dead_code)]
 struct Student<'a, 'b> {
     name: &'a str,
     last_name: &'b str,
 }
 
+#[allow(dead_code)]
 impl<'a, 'b> Student<'a, 'b> {
     fn longest_name(&self, student: &Student<'a, 'b>) -> &'a str {
         if self.name.len() > student.name.len() {
@@ -1602,6 +1605,7 @@ impl<'a, 'b> Student<'a, 'b> {
     }
 }
 
+#[allow(dead_code)]
 fn longest_student_name<'a, 'b>(student1: &Student<'a, 'b>, student2: &Student<'a, 'b>) -> &'a str {
     if student1.name.len() > student2.name.len() {
         student1.name
@@ -1632,6 +1636,7 @@ fn lifetime_struct() {
     println!("{}", result);
 }
 
+#[allow(dead_code)]
 struct Teacher<'a, ID> where ID: Ord {
     id: ID,
     name: &'a str,
@@ -1647,6 +1652,7 @@ fn liftime_annotation_generic() {
     println!("{}", teacher.name);
 }
 
+#[allow(dead_code)]
 #[derive(Debug, PartialEq, PartialOrd)]
 struct Company {
     name: String,
@@ -1674,10 +1680,12 @@ fn attribute_derive() {
     println!("{}", result);
 }
 
+#[allow(dead_code)]
 fn display_number(value: i32) {
     println!("{}", value);
 }
 
+#[allow(dead_code)]
 fn display_number_reference(value: &i32) {
     println!("{}", value);
 }
@@ -1693,6 +1701,7 @@ fn smart_pointer_box() {
     println!("{}", value);
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 enum ProductCategory {
     Of(String, Box<ProductCategory>),
@@ -1712,6 +1721,7 @@ fn box_enum() {
     print_category(&category);
 }
 
+#[allow(dead_code)]
 fn print_category(category: &ProductCategory) {
     println!("{:?}", category);
 }
@@ -1725,6 +1735,7 @@ fn dereference() {
     print!("{}", result);
 }
 
+#[allow(dead_code)]
 struct MyValue<T> {
     value: T,
 }
@@ -1746,6 +1757,7 @@ fn dereference_struct() {
     println!("{}", *value);
 }
 
+#[allow(dead_code)]
 fn say_hello_reference(name: &String) {
     println!("Hello {}", name);
 }
@@ -1759,6 +1771,7 @@ fn deref_reference() {
     say_hello_reference(&name);
 }
 
+#[allow(dead_code)]
 struct Book {
     title: String,
 }
@@ -1778,10 +1791,12 @@ fn cleanup_drop() {
     println!("{}", book.title);
 }
 
+#[allow(dead_code)]
 enum Brand {
     Of(String, Rc<Brand>),
     End
 }
+
 
 #[test]
 fn multiple_ownership() {
@@ -1792,6 +1807,7 @@ fn multiple_ownership() {
     let apple: Rc<Brand> = Rc::new(Brand::Of("Apple".to_string(), Rc::new(Brand::End)));
     println!("Apple reference count {}", Rc::strong_count(&apple));
 
+    
     let laptop: Brand = Brand::Of("Laptop".to_string(), Rc::clone(&apple));
     println!("Apple reference count {}", Rc::strong_count(&apple));
 
@@ -1803,6 +1819,7 @@ fn multiple_ownership() {
     println!("Apple reference count {}", Rc::strong_count(&apple));
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 struct Seller {
     name: RefCell<String>,
@@ -1824,6 +1841,7 @@ fn interior_mutability_ref_cell() {
     println!("{:?}", seller);
 }
 
+#[allow(dead_code)]
 static APPLICATION: &str = "Rust Application";
 
 #[test]
@@ -1831,8 +1849,10 @@ fn static_test() {
     println!("{}", APPLICATION);
 }
 
+#[allow(dead_code)]
 static mut COUNTER: u32 = 0;
 
+#[allow(dead_code)]
 unsafe fn increment() {
     COUNTER += 1;
 }
