@@ -1,4 +1,4 @@
-#![cfg_attr(debug_assertions, allow(dead_code, unused_imports))]
+#![cfg_attr(debug_assertions, allow(dead_code, unused_imports, unused))]
 mod first;
 mod second;
 mod third;
@@ -6,7 +6,6 @@ mod model;
 
 mod _1_variable;
 mod _2_hashing;
-mod _0_common;
 
 use first::say_hello as say_hello_first;
 use second::say_hello as say_hello_second;
