@@ -4,3 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+bcrypt = "0.15.1"
+rust-argon2 = "2.1.0"
